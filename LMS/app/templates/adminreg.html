@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Admin Registration{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card admin-reg-card">
+        <div class="auth-header">
+            <h1>Admin Registration</h1>
+            <p class="text-muted">Secret key required for admin registration</p>
+        </div>
+        
+        <form method="POST" class="auth-form">
+            <input type="hidden" name="secret_key" value="sinigangmix">
+            
+            <div class="form-group">
+                <label for="username">Admin Username</label>
+                <input type="text" 
+                       id="username" 
+                       name="username" 
+                       class="form-control"
+                       required
+                       autocomplete="username">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" 
+                       id="password" 
+                       name="password" 
+                       class="form-control"
+                       required
+                       autocomplete="new-password">
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">
+                Register Admin
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}
