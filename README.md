@@ -8,43 +8,49 @@ A full-stack Library Management System built with **Flask**, **SQLite**, **SQLAl
 
 ## 🖼️ Walkthrough
 
-### 🏠 **Landing Page**
+### 🏠 **Landing Page (Not Authenticated)**
 
 ![Landing Page](static/screenshots/landing_page.png)
 
 ---
 
-### 🔐 **Login Page**
+### 🏠 **Landing Page (Authenticated)**
+
+![Landing Page](static/screenshots/landing_page(2).png)
+
+---
+
+### 🔐 **Login Page (Non-Admin)**
 
 ![Login Page](static/screenshots/login_page.png)
 
 ---
 
-### 📝 **User Registration**
+### 📝 **User Registration (Non-Admin)**
 
 ![User Registration](static/screenshots/user_registration.png)
 
 ---
 
-### 👤 **User Dashboard**
+### 👤 **User Dashboard (Non-Admin)**
 
 ![User Dashboard](static/screenshots/user_dashboard.png)
 
 ---
 
-### 👑 **Admin Registration**
+### 👑 **Admin Registration (Admin)**
 
 ![Admin Registration](static/screenshots/admin_registration.png)
 
 ---
 
-### 📖 **Add New Book**
+### 📖 **Add New Book (Admin)**
 
 ![Book Details](static/screenshots/add_new_book.png)
 
 ---
 
-### 📊 **Admin Dashboard**
+### 📊 **Admin Dashboard (Admin)**
 
 ![Admin Dashboard](static/screenshots/admin_dashboard.png)
 
@@ -52,7 +58,7 @@ A full-stack Library Management System built with **Flask**, **SQLite**, **SQLAl
 
 ---
 
-### 🌗 **Dark Mode Toggle**
+### 🌗 **Dark Mode Toggle (Admin)**
 
 ![light mode](static/screenshots/dark_mode.png) 
 
