@@ -60,7 +60,7 @@ A full-stack Library Management System built with **Flask**, **SQLite**, **SQLAl
 
 ---
 
-# Problems in this project 
+# Problems Encountered
 
 - ❌ Haven't added new books  
 
