@@ -64,18 +64,19 @@ A full-stack Library Management System built with **Flask**, **SQLite**, **SQLAl
 
 - ⚠️ Haven't tested the "Add New Book" feature  
 
+- 😥 very bright light mode
+
 - 🧩 Jenga code
 
 - 🐛 Buggy GUI  
 
-- 🔄 My Python keeps removing itself from the PATH (unknown reason)  
+- 🔄 My Python keeps removing itself from the PATH
 
 - 🚫 No global access (Only works on `localhost`)  
 
 - 💣 Very unstable database
 
-- 📝 Many, many more...  
-
+- ⏳ Coming soon...
 
 
 ---
