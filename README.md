@@ -58,6 +58,28 @@ A full-stack Library Management System built with **Flask**, **SQLite**, **SQLAl
 
 ---
 
+# Problems in this project 
+
+- ❌ Haven't added new books  
+
+- ⚠️ Haven't tested the "Add New Book" feature  
+
+- 🧩 Jenga code
+
+- 🐛 Buggy GUI  
+
+- 🔄 My Python keeps removing itself from the PATH (unknown reason)  
+
+- 🚫 No global access (Only works on `localhost`)  
+
+- 💣 Very unstable database
+
+- 📝 Many, many more...  
+
+
+
+---
+
 ## ⚡ Features
 
 - 🔐 **User Authentication & Role-Based Access**
