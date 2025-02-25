@@ -84,6 +84,8 @@ A full-stack Library Management System built with **Flask**, **SQLite**, **SQLAl
 
 - 💣 Very unstable database
 
+- 🎀 Lots of Loose Ends
+
 - ⏳ Coming soon...
 
 
