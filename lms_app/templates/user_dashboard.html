@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% block title %}User Dashboard{% endblock %}
+
+{% block content %}
+<div class="user-dashboard">
+    <div class="dashboard-header">
+        <h1>Welcome Back, {{ current_user.username }}</h1>
+        <div class="user-stats">
+            <div class="stat-item">
+                <i class="fas fa-book-open"></i>
+                <span class="stat-value">{{ total_borrowed }}</span>
+                <span class="stat-label">Books Borrowed</span>
+            </div>
+            <div class="stat-item">
+                <i class="fas fa-undo"></i>
+                <span class="stat-value">{{ total_returned }}</span>
+                <span class="stat-label">Books Returned</span>
+            </div>
+            <div class="stat-item">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span class="stat-value">{{ total_overdue }}</span>
+                <span class="stat-label">Overdue Books</span>
+            </div>
+        </div>
+    </div>
+
+<h2>📚 My Borrowed Books</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Book</th>
+            <th>Due Date</th>
+            <th>Status</th>
+            <th>Fine</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for transaction in current_loans %}
+        <tr>
+            <td>{{ transaction.book.title }}</td>
+            <td>{{ transaction.due_date.strftime('%Y-%m-%d') }}</td>
+            <td>{{ transaction.status }}</td>
+            <td>
+                {% if transaction.fine_amount > 0 %}
+                    <span class="fine-amount">${{ transaction.fine_amount }}</span>
+                {% else %}
+                    $0.00
+                {% endif %}
+            </td>
+            <td>
+                {% if transaction.status == 'Borrowed' %}
+                    <form method="POST" action="{{ url_for('main.return_book', transaction_id=transaction.id) }}">
+                        <button type="submit" class="btn btn-warning btn-sm">Return</button>
+                    </form>
+                {% elif transaction.fine_amount > 0 %}
+                    <form method="POST" action="{{ url_for('main.clear_fine', transaction_id=transaction.id) }}">
+                        <button type="submit" class="btn btn-primary btn-sm">Clear Fine</button>
+                    </form>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Total Fine Summary -->
+{% set total_fine = current_loans | sum(attribute='fine_amount') %}
+{% if total_fine > 0 %}
+    <div class="alert alert-warning">
+        Total Outstanding Fines: 💰 ${{ total_fine }}
+    </div>
+{% else %}
+    <div class="alert alert-success">
+        No outstanding fines. ✅
+    </div>
+{% endif %}
+
+    <!-- 📖 AI-Based Book Recommendations -->
+    <section class="card">
+        <div class="card-header">
+            <h2>Recommended for You</h2>
+        </div>
+        <div class="book-grid">
+            {% for book in recommended_books %}
+            <div class="book-card">
+                <img src="{{ url_for('static', filename='covers/' + book.title|slugify + '.jpg') }}" alt="{{ book.title }}">
+                <h3>{{ book.title }}</h3>
+                <p class="author">{{ book.author }}</p>
+                <a href="{{ url_for('main.book_details', book_id=book.id) }}" class="btn btn-primary">Details</a>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- 🔍 Available Books with Search -->
+    <section class="card">
+        <div class="card-header">
+            <h2>Available Books</h2>
+            <input type="search" class="search-input" id="book-search" placeholder="Search books...">
+        </div>
+        <div class="book-grid" id="book-list">
+            {% for book in books %}
+            <div class="book-card">
+                <img src="{{ url_for('static', filename='covers/' + book.title|slugify + '.jpg') }}" alt="{{ book.title }}">
+                <h3>{{ book.title }}</h3>
+                <p class="author">{{ book.author }}</p>
+                {% if book.availability %}
+                <a href="{{ url_for('main.borrow_book', book_id=book.id) }}" class="btn btn-success">Borrow</a>
+                {% else %}
+                <span class="badge badge-danger">Borrowed</span>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+	
+	
+
+</div>
+
+<!-- 🔍 Search Script -->
+<script>
+    const searchInput = document.getElementById('book-search');
+    const bookList = document.getElementById('book-list').children;
+
+    searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        Array.from(bookList).forEach(book => {
+            const title = book.querySelector('h3').textContent.toLowerCase();
+            book.style.display = title.includes(searchTerm) ? '' : 'none';
+        });
+    });
+</script>
+{% endblock %}

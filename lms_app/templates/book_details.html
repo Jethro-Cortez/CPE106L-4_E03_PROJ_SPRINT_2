@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% block title %}{{ book.title }}{% endblock %}
+
+{% block content %}
+<div class="book-detail">
+
+    <!-- 📖 Book Overview -->
+    <div class="book-header">
+        <div class="book-cover-lg">
+            <img src="{{ url_for('static', filename='covers/' + book.title|slugify + '.jpg') }}" 
+                 alt="{{ book.title }} cover">
+        </div>
+
+        <div class="book-meta">
+            <h1>{{ book.title }}</h1>
+            <div class="book-author">By {{ book.author }}</div>
+
+            <!-- 📊 Availability Status -->
+            <div class="book-status">
+                <span class="status-indicator {{ 'available' if book.availability else 'borrowed' }}">
+                    {{ 'Available' if book.availability else 'Borrowed' }}
+                </span>
+                {% if not book.availability %}
+                <p class="due-date">
+                    <i class="fas fa-clock"></i>
+                    Expected return: {{ book.transactions[-1].due_date|date_format }}
+                </p>
+                {% endif %}
+            </div>
+
+            <!-- 📅 Borrow/Join Waitlist -->
+            {% if current_user.is_authenticated and current_user.role == 'user' %}
+            <form method="POST" action="{{ url_for('main.borrow_book', book_id=book.id) }}">
+                <button type="submit" 
+                        class="btn btn-primary btn-block" 
+                        {{ 'disabled' if not book.availability }}>
+                    {{ 'Borrow Now' if book.availability else 'Join Waitlist' }}
+                </button>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- 📋 Book Details -->
+    <section class="card book-info-card">
+        <h2 class="card-header">Book Details</h2>
+        <div class="details-grid">
+            <div class="detail-item">
+                <h3>Genre</h3>
+                <p>{{ book.genre }}</p>
+            </div>
+            <div class="detail-item">
+                <h3>Published Year</h3>
+                <p>{{ book.publication_year }}</p>
+            </div>
+            <div class="detail-item">
+                <h3>ISBN</h3>
+                <p>{{ book.isbn }}</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⭐ Reviews Section -->
+    <section class="card reviews-card">
+        <div class="card-header">
+            <h2>Community Reviews</h2>
+            <span class="rating-badge">
+                <i class="fas fa-star"></i> {{ average_rating }}/5
+            </span>
+        </div>
+
+        <div class="reviews-container">
+            {% for feedback in feedbacks %}
+            <div class="review-item">
+                <div class="review-header">
+                    <div class="user-badge">
+                        <i class="fas fa-user-circle"></i>
+                        {{ feedback.user.username }}
+                    </div>
+                    <div class="review-meta">
+                        <span class="review-date">{{ feedback.timestamp|time_ago }}</span>
+                        <div class="review-rating">
+                            {% for _ in range(feedback.rating) %}
+                            <i class="fas fa-star"></i>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <p class="review-text">{{ feedback.review_text }}</p>
+            </div>
+            {% else %}
+            <p class="no-reviews">No reviews yet. Be the first to review!</p>
+            {% endfor %}
+        </div>
+
+        <!-- 📝 Submit Review -->
+        {% if current_user.is_authenticated and current_user.role == 'user' %}
+        <form method="POST" action="{{ url_for('main.add_feedback', book_id=book.id) }}" class="review-form">
+            <div class="form-group">
+                <label for="review-text">Write Your Review</label>
+                <textarea id="review-text" 
+                          name="review_text" 
+                          class="form-control" 
+                          rows="4"
+                          placeholder="Share your thoughts about this book..."
+                          required></textarea>
+            </div>
+
+            <div class="form-group rating-group">
+                <label>Rating:</label>
+                <div class="star-rating">
+                    {% for i in range(5,0,-1) %}
+                    <input type="radio" id="star{{i}}" name="rating" value="{{i}}">
+                    <label for="star{{i}}" class="fas fa-star"></label>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">
+                Submit Review
+            </button>
+        </form>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

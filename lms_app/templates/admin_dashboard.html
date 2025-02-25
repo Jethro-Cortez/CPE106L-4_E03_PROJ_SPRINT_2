@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="admin-dashboard">
+    <div class="dashboard-header">
+        <h1>Library Administration</h1>
+        <div class="admin-actions">
+            <a href="{{ url_for('main.add_book') }}" class="btn btn-primary">➕ Add Book</a>
+            <a href="{{ url_for('main.admin_register', key='sinigangmix') }}" class="btn btn-secondary">👑 Add Admin</a>
+        </div>
+    </div>
+
+    <!-- 📊 System Analytics -->
+    <section class="card analytics-card">
+        <h2 class="card-header">System Analytics</h2>
+        <div class="metrics-grid">
+            <div class="metric-item">
+                <h3>Total Books</h3>
+                <p class="metric-value">{{ total_books }}</p>
+            </div>
+            <div class="metric-item">
+                <h3>Active Loans</h3>
+                <p class="metric-value">{{ active_loans }}</p>
+            </div>
+            <div class="metric-item">
+                <h3>Overdue Books</h3>
+                <p class="metric-value">{{ overdue_books }}</p>
+            </div>
+            <div class="metric-item">
+                <h3>Top Borrowed Book</h3>
+                <p class="metric-value">{{ top_book.title }}</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 📚 Book Management -->
+    <section class="card">
+        <div class="card-header">
+            <h2>Book Management</h2>
+            <input type="search" class="search-input" id="admin-book-search" placeholder="Search books...">
+        </div>
+
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Genre</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="admin-book-list">
+                    {% for book in books %}
+                    <tr>
+                        <td>{{ book.title }}</td>
+                        <td>{{ book.author }}</td>
+                        <td>{{ book.genre }}</td>
+                        <td>
+                            <span class="{{ 'available' if book.availability else 'borrowed' }}">
+                                {{ 'Available' if book.availability else 'Borrowed' }}
+                            </span>
+                        </td>
+                        <td>
+                            <a href="{{ url_for('main.edit_book', book_id=book.id) }}" class="btn btn-sm btn-warning">✏️</a>
+                            <form method="POST" action="{{ url_for('main.delete_book', book_id=book.id) }}" style="display:inline;">
+                                <button type="submit" class="btn btn-sm btn-danger">🗑️</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+	
+	<h2>💰 Overdue Fines</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>Book</th>
+            <th>Overdue Days</th>
+            <th>Fine Amount</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for transaction in overdue_transactions %}
+        <tr>
+            <td>{{ transaction.user.username }}</td>
+            <td>{{ transaction.book.title }}</td>
+            <td>{{ (transaction.return_date - transaction.due_date).days if transaction.return_date else 'Pending' }}</td>
+            <td>${{ transaction.fine_amount }}</td>
+            <td>{{ transaction.status }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="5">No overdue books. ✅</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+	
+</div>
+
+<!-- 🔍 Admin Book Search Script -->
+<script>
+    const adminSearchInput = document.getElementById('admin-book-search');
+    const adminBookList = document.getElementById('admin-book-list').children;
+
+    adminSearchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        Array.from(adminBookList).forEach(row => {
+            const title = row.children[0].textContent.toLowerCase();
+            row.style.display = title.includes(searchTerm) ? '' : 'none';
+        });
+    });
+</script>
+{% endblock %}

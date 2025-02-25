@@ -1,0 +1,457 @@
+/* 🎉 Hero Section */
+.hero {
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    color: white;
+    text-align: center;
+    padding: 4rem 1rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+}
+
+.hero-title {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+}
+
+.hero-buttons .btn {
+    margin: 0.5rem;
+}
+
+/* 📚 Feature Highlights */
+.features {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.feature-card {
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-align: center;
+    width: 250px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+
+/* ⭐ Testimonials */
+.testimonials {
+    text-align: center;
+    margin: 3rem 0;
+}
+
+.testimonial-cards {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.testimonial-card {
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    padding: 1.5rem;
+    width: 250px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    font-style: italic;
+}
+
+/* 🔐 Auth Container */
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+}
+
+.auth-card {
+    background-color: var(--card-bg);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.auth-title {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.auth-subtitle {
+    font-size: 1rem;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+}
+
+.auth-form .form-group {
+    text-align: left;
+    margin-bottom: 1rem;
+}
+
+.auth-form .form-control {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+}
+
+.auth-form .btn-block {
+    width: 100%;
+    padding: 0.75rem;
+}
+
+.auth-footer {
+    margin-top: 1rem;
+}
+
+.auth-footer a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.auth-footer a:hover {
+    text-decoration: underline;
+}
+
+/* ✅ Auth Pages Consistency */
+.auth-card {
+    background-color: var(--card-bg);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.auth-form .form-group {
+    text-align: left;
+    margin-bottom: 1rem;
+}
+
+.auth-form .form-control {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+}
+
+.auth-form .btn-block {
+    width: 100%;
+    padding: 0.75rem;
+}
+
+.auth-footer {
+    margin-top: 1rem;
+}
+
+.auth-footer a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.auth-footer a:hover {
+    text-decoration: underline;
+}
+
+/* 📖 Book Details */
+.book-detail {
+    margin: 2rem 0;
+}
+
+.book-header {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.book-cover-lg img {
+    width: 220px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.book-meta h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.book-status .status-indicator {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+.status-indicator.available {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-indicator.borrowed {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* ⭐ Reviews */
+.reviews-container {
+    margin-top: 1.5rem;
+}
+
+.review-item {
+    background-color: var(--card-bg);
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.review-rating i {
+    color: #f1c40f;
+}
+
+.no-reviews {
+    text-align: center;
+    color: var(--text-muted);
+}
+
+/* 📝 Review Form */
+.review-form .form-group {
+    margin-bottom: 1rem;
+}
+
+.star-rating input {
+    display: none;
+}
+
+.star-rating label {
+    font-size: 1.5rem;
+    color: #ccc;
+    cursor: pointer;
+}
+
+.star-rating input:checked ~ label,
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+    color: #f1c40f;
+}
+
+/* 📝 Feedback Page */
+.feedback-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.feedback-title {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.feedback-title span {
+    color: var(--primary-color);
+}
+
+.feedback-form .form-group {
+    margin-bottom: 1rem;
+}
+
+.feedback-form textarea {
+    width: 100%;
+    resize: none;
+    padding: 0.75rem;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+}
+
+.star-rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-start;
+}
+
+.star-rating input {
+    display: none;
+}
+
+.star-rating label {
+    font-size: 1.5rem;
+    color: #ccc;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.star-rating input:checked ~ label,
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+    color: #f1c40f;
+}
+
+/* 💬 Reviews */
+.reviews-section {
+    margin-top: 2rem;
+}
+
+.review-item {
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem 0;
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.review-rating i {
+    color: #f1c40f;
+}
+
+.review-text {
+    font-size: 0.95rem;
+}
+
+.no-reviews {
+    text-align: center;
+    color: var(--text-muted);
+    margin-top: 1rem;
+}
+
+.login-prompt {
+    text-align: center;
+    margin: 1rem 0;
+}
+
+.login-prompt a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.login-prompt a:hover {
+    text-decoration: underline;
+}
+
+/* 👑 Admin Registration */
+.admin-reg-card {
+    background-color: var(--card-bg);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+}
+
+.auth-header {
+    margin-bottom: 1.5rem;
+}
+
+.auth-title {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.auth-subtitle {
+    font-size: 1rem;
+    color: var(--text-muted);
+}
+
+.auth-form .form-group {
+    text-align: left;
+    margin-bottom: 1rem;
+}
+
+.auth-form .form-control {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+}
+
+.auth-form .btn-block {
+    width: 100%;
+    padding: 0.75rem;
+}
+
+.auth-footer {
+    margin-top: 1rem;
+}
+
+.auth-footer a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.auth-footer a:hover {
+    text-decoration: underline;
+}
+
+/* 💰 Fine Highlights */
+.fine-amount {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+.alert-warning {
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+    color: #856404;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+    color: #155724;
+}
+
+/* 🌟 Primary Button Style */
+.btn.btn-primary {
+    background-color: #3f51b5; /* Indigo base color */
+    border: none;
+    color: #fff;
+    padding: 0.6rem 1.2rem;
+    font-size: 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* 🔵 Hover Effect */
+.btn.btn-primary:hover {
+    background-color: #303f9f; /* Darker indigo */
+    box-shadow: 0 4px 12px rgba(63, 81, 181, 0.3);
+}
+
+/* 🔵 Focus State */
+.btn.btn-primary:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.4);
+}
+
+/* 🔵 Disabled State */
+.btn.btn-primary:disabled {
+    background-color: #9fa8da;
+    cursor: not-allowed;
+}
