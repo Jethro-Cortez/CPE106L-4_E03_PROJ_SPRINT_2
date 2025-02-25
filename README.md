@@ -1,1 +1,1 @@
-# Hi sir punta po kayo sa LMS branch
+# Hi sir punta po kayo sa LMS branch asa readme na po lahat
