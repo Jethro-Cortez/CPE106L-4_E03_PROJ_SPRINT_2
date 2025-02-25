@@ -1,0 +1,40 @@
+/* 🌗 Default (Light Mode) */
+:root {
+    --primary-color: #3f51b5;
+    --background-color: #f9f9f9;
+    --card-bg: #ffffff;
+    --text-color: #212121;
+    --text-muted: #757575;
+    --border-color: #e0e0e0;
+}
+
+/* 🌑 Dark Mode */
+[data-theme="dark"] {
+    --primary-color: #90caf9;
+    --background-color: #121212;
+    --card-bg: #1e1e1e;
+    --text-color: #e0e0e0;
+    --text-muted: #bdbdbd;
+    --border-color: #424242;
+}
+
+/* 🎨 Apply Variables */
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.navbar, .auth-card, .card, .book-detail, .feedback-container {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+}
+
+a {
+    color: var(--primary-color);
+}
+
+a:hover {
+    text-decoration: underline;
+}
