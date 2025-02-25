@@ -1,4 +1,4 @@
-# 📚 Modern Library Management System (LMS)
+#  BookIT
 
 A full-stack Library Management System built with **Flask**, **SQLite**, **SQLAlchemy**, and **Flask-Migrate**. It supports user authentication, role-based access control, book management, transaction tracking, and feedback handling. 
 
@@ -43,7 +43,7 @@ A full-stack Library Management System built with **Flask**, **SQLite**, **SQLAl
    set FLASK_APP=main.py
    set FLASK_ENV=development
 
-
+**tuloy ko nalang next time antok nako sir**
 
 
 
