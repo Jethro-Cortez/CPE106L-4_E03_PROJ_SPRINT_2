@@ -29,17 +29,15 @@ A full-stack Library Management System built with **Flask**, **SQLite**, **SQLAl
 1. **Clone the Repository:**
 
    ```bash
-   git clone https://github.com/your-username/library-management-system.git
-   cd library-management-system
+   git clone https://github.com/Jethro-Cortez/CPE106L-4_E03_PROJ_SPRINT_2.git
+   cd CPE106L-4_E03_PROJ_SPRINT_2
    ```
 
 2. **Set Up Virtual Environment (Optional but Recommended):**
 
    ```bash
    python -m venv venv
-   venv\Scripts\activate  # For Windows
-   # OR
-   source venv/bin/activate  # For Mac/Linux
+   venv\Scripts\activate
    ```
 
 3. **Install Dependencies:**
@@ -161,9 +159,3 @@ LMS/
   flask db migrate -m "Reset migrations"
   flask db upgrade
   ```
-
----
-
-## 📝 License
-
-This project is licensed under the [MIT License](LICENSE).
