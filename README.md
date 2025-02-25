@@ -1,4 +1,6 @@
-# 📚 BookIT
+![logo](static/images/logorepo.png)
+
+---
 
 A full-stack Library Management System built with **Flask**, **SQLite**, **SQLAlchemy**, and **Flask-Migrate**. It supports user authentication, role-based access control, book management, transaction tracking, and feedback handling. 
 
