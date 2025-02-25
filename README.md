@@ -4,6 +4,60 @@ A full-stack Library Management System built with **Flask**, **SQLite**, **SQLAl
 
 ---
 
+## 🖼️ Walkthrough
+
+### 🏠 **Landing Page**
+
+![Landing Page](static/screenshots/landing_page.png)
+
+---
+
+### 🔐 **Login Page**
+
+![Login Page](static/screenshots/login_page.png)
+
+---
+
+### 📝 **User Registration**
+
+![User Registration](static/screenshots/user_registration.png)
+
+---
+
+### 👤 **User Dashboard**
+
+![User Dashboard](static/screenshots/user_dashboard.png)
+
+---
+
+### 👑 **Admin Registration**
+
+![Admin Registration](static/screenshots/admin_registration.png)
+
+---
+
+### 📖 **Add New Book**
+
+![Book Details](static/screenshots/add_new_book.png)
+
+---
+
+### 📊 **Admin Dashboard**
+
+![Admin Dashboard](static/screenshots/admin_dashboard.png)
+
+![Admin Dashboard 2](static/screenshots/admin_dashboard(2).png)
+
+---
+
+### 🌗 **Dark Mode Toggle**
+
+![light mode](static/screenshots/dark_mode.png) 
+
+![Dark Mode](static/screenshots/dark_mode(2).png)
+
+---
+
 ## ⚡ Features
 
 - 🔐 **User Authentication & Role-Based Access**
