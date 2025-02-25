@@ -3,46 +3,49 @@
 
 {% block content %}
 <div class="admin-dashboard">
-    <div class="dashboard-header">
+
+    <!-- 👑 Dashboard Header -->
+    <header class="dashboard-header container">
         <h1>Library Administration</h1>
         <div class="admin-actions">
             <a href="{{ url_for('main.add_book') }}" class="btn btn-primary">➕ Add Book</a>
-            <a href="{{ url_for('main.admin_register', key='sinigangmix') }}" class="btn btn-secondary">👑 Add Admin</a>
+            <a href="{{ url_for('main.admin_register', key='sinigangmix') }}" class="btn btn-primary">👑 Add Admin</a>
         </div>
-    </div>
+    </header>
 
     <!-- 📊 System Analytics -->
-    <section class="card analytics-card">
-        <h2 class="card-header">System Analytics</h2>
+    <section class="container section-card" aria-labelledby="system-analytics-heading">
+        <h2 id="system-analytics-heading">📊 System Analytics</h2>
         <div class="metrics-grid">
             <div class="metric-item">
                 <h3>Total Books</h3>
-                <p class="metric-value">{{ total_books }}</p>
+                <p class="metric-value">{{ total_books if total_books else '0' }}</p>
             </div>
             <div class="metric-item">
                 <h3>Active Loans</h3>
-                <p class="metric-value">{{ active_loans }}</p>
+                <p class="metric-value">{{ active_loans if active_loans else '0' }}</p>
             </div>
             <div class="metric-item">
                 <h3>Overdue Books</h3>
-                <p class="metric-value">{{ overdue_books }}</p>
+                <p class="metric-value">{{ overdue_books if overdue_books else '0' }}</p>
             </div>
             <div class="metric-item">
                 <h3>Top Borrowed Book</h3>
-                <p class="metric-value">{{ top_book.title }}</p>
+                <p class="metric-value">{{ top_book.title if top_book else 'No Data' }}</p>
             </div>
         </div>
     </section>
 
     <!-- 📚 Book Management -->
-    <section class="card">
+    <section class="container section-card" aria-labelledby="book-management-heading">
         <div class="card-header">
-            <h2>Book Management</h2>
-            <input type="search" class="search-input" id="admin-book-search" placeholder="Search books...">
+            <h2 id="book-management-heading">📚 Book Management</h2>
+            <input type="search" class="search-input" id="admin-book-search" placeholder="Search books..." aria-label="Search books">
         </div>
 
         <div class="table-responsive">
             <table class="table">
+                <caption>Manage library books</caption>
                 <thead>
                     <tr>
                         <th>Title</th>
@@ -53,59 +56,72 @@
                     </tr>
                 </thead>
                 <tbody id="admin-book-list">
-                    {% for book in books %}
-                    <tr>
-                        <td>{{ book.title }}</td>
-                        <td>{{ book.author }}</td>
-                        <td>{{ book.genre }}</td>
-                        <td>
-                            <span class="{{ 'available' if book.availability else 'borrowed' }}">
-                                {{ 'Available' if book.availability else 'Borrowed' }}
-                            </span>
-                        </td>
-                        <td>
-                            <a href="{{ url_for('main.edit_book', book_id=book.id) }}" class="btn btn-sm btn-warning">✏️</a>
-                            <form method="POST" action="{{ url_for('main.delete_book', book_id=book.id) }}" style="display:inline;">
-                                <button type="submit" class="btn btn-sm btn-danger">🗑️</button>
-                            </form>
-                        </td>
-                    </tr>
-                    {% endfor %}
+                    {% if books %}
+                        {% for book in books %}
+                        <tr>
+                            <td>{{ book.title }}</td>
+                            <td>{{ book.author }}</td>
+                            <td>{{ book.genre }}</td>
+                            <td>
+                                <span class="{{ 'available' if book.availability else 'borrowed' }}">
+                                    {{ 'Available' if book.availability else 'Borrowed' }}
+                                </span>
+                            </td>
+                            <td>
+                                <a href="{{ url_for('main.edit_book', book_id=book.id) }}" class="btn btn-sm btn-warning">✏️</a>
+                                <form method="POST" action="{{ url_for('main.delete_book', book_id=book.id) }}" style="display:inline;">
+                                    <button type="submit" class="btn btn-sm btn-danger">🗑️</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="5">No books found. 📖</td>
+                        </tr>
+                    {% endif %}
                 </tbody>
             </table>
         </div>
     </section>
-	
-	<h2>💰 Overdue Fines</h2>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>User</th>
-            <th>Book</th>
-            <th>Overdue Days</th>
-            <th>Fine Amount</th>
-            <th>Status</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for transaction in overdue_transactions %}
-        <tr>
-            <td>{{ transaction.user.username }}</td>
-            <td>{{ transaction.book.title }}</td>
-            <td>{{ (transaction.return_date - transaction.due_date).days if transaction.return_date else 'Pending' }}</td>
-            <td>${{ transaction.fine_amount }}</td>
-            <td>{{ transaction.status }}</td>
-        </tr>
-        {% else %}
-        <tr>
-            <td colspan="5">No overdue books. ✅</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+    <!-- 💰 Overdue Fines -->
+    <section class="container section-card" aria-labelledby="overdue-fines-heading">
+        <h2 id="overdue-fines-heading">💰 Overdue Fines</h2>
 
-	
+        <div class="table-responsive">
+            <table class="table">
+                <caption>List of overdue fines and their status</caption>
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Book</th>
+                        <th>Overdue Days</th>
+                        <th>Fine Amount</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if overdue_transactions %}
+                        {% for transaction in overdue_transactions %}
+                        <tr>
+                            <td>{{ transaction.user.username }}</td>
+                            <td>{{ transaction.book.title }}</td>
+                            <td>{{ (transaction.return_date - transaction.due_date).days if transaction.return_date else 'Pending' }}</td>
+                            <td>${{ transaction.fine_amount }}</td>
+                            <td>{{ transaction.status }}</td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="5">No overdue books. ✅</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
 </div>
 
 <!-- 🔍 Admin Book Search Script -->

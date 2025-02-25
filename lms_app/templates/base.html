@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern Library - {% block title %}{% endblock %}</title>
+    <title>BookIT - {% block title %}{% endblock %}</title>
 
     <!-- 🌐 Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <!-- 🎨 Custom CSS -->
@@ -21,51 +21,83 @@
 </head>
 
 <body>
-    <!-- 🚀 Navbar -->
-    <nav class="navbar">
-        <div class="container">
-            <a href="{{ url_for('main.index') }}" class="logo">ModernLib</a>
 
-            <button class="navbar-toggler" aria-label="Toggle navigation">
-                <i class="fas fa-bars"></i>
-            </button>
+<!-- 🚀 Navbar with Logo Icon & Name (Fixed) -->
+<nav class="navbar">
+    <div class="container">
+        <!-- 🌟 Logo (Icon Only) -->
+        <a href="{{ url_for('main.index') }}" class="logo">
+		    {% if request.path == '/' or request.path == '/index.html' %}
+            <img src="{{ url_for('static', filename='images/logo-icon.png') }}" alt="BookIT Logo" class="logo-icon" width="50">
+            {% else %}
+			<img src="{{ url_for('static', filename='images/logo-name.png') }}" alt="BookIT Logo" class="logo-icon" width="200">
+            {% endif %}
+		
+		</a>
+		
+		
 
-            <div class="nav-links">
-                {% if current_user.is_authenticated %}
-                    <a href="{{ url_for('main.user_dashboard') }}" class="nav-item">Dashboard</a>
-                    {% if current_user.role == 'admin' %}
-                        <a href="{{ url_for('main.admin_dashboard') }}" class="nav-item">Admin</a>
-                    {% endif %}
-                    <a href="{{ url_for('main.logout') }}" class="btn btn-primary">Logout</a>
-                {% else %}
-                    <a href="{{ url_for('main.login') }}" class="nav-item">Login</a>
-                    <a href="{{ url_for('main.register') }}" class="btn btn-primary">Register</a>
+        <!-- 📱 Navbar Toggle (for mobile) -->
+        <button class="navbar-toggler" aria-label="Toggle navigation" aria-expanded="false">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <!-- 🌐 Navigation Links -->
+        <ul class="nav-links">
+            {% if current_user.is_authenticated %}
+                <li>
+                    <a href="{{ url_for('main.user_dashboard') }}" class="btn btn-primary">Dashboard</a>
+                </li>
+                {% if current_user.role == 'admin' %}
+                    <li>
+                        <a href="{{ url_for('main.admin_dashboard') }}" class="btn btn-primary">Admin</a>
+                    </li>
                 {% endif %}
-                <button class="theme-toggle btn-icon" aria-label="Toggle theme">
-                    <i class="fas fa-moon"></i> 
+                <li>
+                    <a href="{{ url_for('main.logout') }}" class="btn btn-primary">Logout</a>
+                </li>
+            {% else %}
+                <li>
+                    <a href="{{ url_for('main.login') }}" class="btn btn-primary">Login</a>
+                </li>
+                <li>
+                    <a href="{{ url_for('main.register') }}" class="btn btn-primary">Register</a>
+                </li>
+            {% endif %}
+
+            <!-- 🌗 Theme Toggle -->
+            <li>
+                <button class="theme-toggle btn-icon" aria-label="Toggle theme" aria-pressed="false">
+                    <i class="fas fa-moon"></i>
                 </button>
-            </div>
-        </div>
-    </nav>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+
+
 
     <!-- 💡 Flash Messages -->
-    <div class="flash-messages">
+    <section class="flash-messages" aria-live="polite">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
-                {% for category, message in messages %}
-                    <div class="flash flash-{{ category }}">
-                        <span class="flash-icon">
-                            {% if category == 'success' %}✅
-                            {% elif category == 'error' %}❌
-                            {% else %}ℹ️{% endif %}
-                        </span>
-                        {{ message }}
-                        <button class="flash-close" aria-label="Close">&times;</button>
-                    </div>
-                {% endfor %}
+                <ul>
+                    {% for category, message in messages %}
+                        <li class="flash flash-{{ category }}" role="alert">
+                            <span class="flash-icon">
+                                {% if category == 'success' %}✅
+                                {% elif category == 'error' %}❌
+                                {% else %}ℹ️{% endif %}
+                            </span>
+                            {{ message }}
+                            <button class="flash-close" aria-label="Close">&times;</button>
+                        </li>
+                    {% endfor %}
+                </ul>
             {% endif %}
         {% endwith %}
-    </div>
+    </section>
 
     <!-- 📄 Page Content -->
     <main class="container">

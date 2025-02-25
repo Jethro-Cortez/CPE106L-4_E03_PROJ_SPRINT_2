@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+{% block title %}Add Book{% endblock %}
+
+{% block content %}
+<div class="container section-card enhanced-form">
+    <h1 class="form-title">📖 Add a New Book</h1>
+    <p class="form-subtitle">Fill in the details and upload a cover to enrich your library.</p>
+
+    <!-- 🛡️ Flash Messages for Feedback -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <!-- 📋 Enhanced Book Form -->
+    <form method="POST" enctype="multipart/form-data" id="addBookForm" novalidate>
+        <!-- 📚 Book Title -->
+        <div class="form-group floating-label">
+            <input type="text" id="title" name="title" class="form-control" required aria-required="true">
+            <label for="title">📚 Title <span class="required">*</span></label>
+            <small class="form-error" id="titleError">Title is required.</small>
+        </div>
+
+        <!-- 👤 Author -->
+        <div class="form-group floating-label">
+            <input type="text" id="author" name="author" class="form-control" required aria-required="true">
+            <label for="author">👤 Author <span class="required">*</span></label>
+            <small class="form-error" id="authorError">Author is required.</small>
+        </div>
+
+        <!-- 🏷️ Category -->
+        <div class="form-group floating-label">
+            <input type="text" id="category" name="category" class="form-control">
+            <label for="category">🏷️ Category</label>
+        </div>
+
+        <!-- 📝 Description -->
+        <div class="form-group floating-label">
+            <textarea id="description" name="description" class="form-control" rows="4"></textarea>
+            <label for="description">📝 Description</label>
+        </div>
+
+        <!-- 📅 Publish Date -->
+        <div class="form-group floating-label">
+            <input type="date" id="publish_date" name="publish_date" class="form-control">
+            <label for="publish_date">📅 Publish Date</label>
+        </div>
+
+        <!-- 🔢 Quantity with Real-Time Feedback -->
+        <div class="form-group floating-label">
+            <input type="number" id="quantity" name="quantity" class="form-control" min="1" required aria-required="true">
+            <label for="quantity">🔢 Quantity <span class="required">*</span></label>
+            <small class="form-error" id="quantityError">Quantity must be at least 1.</small>
+            <p id="quantity-feedback" class="quantity-feedback"></p>
+        </div>
+
+        <!-- 🖼️ Drag-and-Drop Cover Upload -->
+        <div class="form-group">
+            <label>📂 Upload Cover Image</label>
+            <div id="drop-zone">
+                <p>Drag & drop the cover image here or click to upload</p>
+                <input type="file" id="cover" name="cover" accept="image/*" hidden>
+                <img id="cover-preview" src="#" alt="Cover Preview" style="display:none;">
+            </div>
+        </div>
+
+        <!-- 🚀 Submit Button -->
+        <button type="submit" class="btn btn-gradient">Add Book 🚀</button>
+    </form>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("addBookForm");
+        const titleInput = document.getElementById("title");
+        const authorInput = document.getElementById("author");
+        const quantityInput = document.getElementById("quantity");
+        const titleError = document.getElementById("titleError");
+        const authorError = document.getElementById("authorError");
+        const quantityError = document.getElementById("quantityError");
+        const quantityFeedback = document.getElementById("quantity-feedback");
+        const dropZone = document.getElementById("drop-zone");
+        const coverInput = document.getElementById("cover");
+        const coverPreview = document.getElementById("cover-preview");
+
+        // ✅ Client-Side Validation
+        form.addEventListener("submit", function (e) {
+            let valid = true;
+
+            if (!titleInput.value.trim()) {
+                titleError.style.display = "block";
+                valid = false;
+            } else {
+                titleError.style.display = "none";
+            }
+
+            if (!authorInput.value.trim()) {
+                authorError.style.display = "block";
+                valid = false;
+            } else {
+                authorError.style.display = "none";
+            }
+
+            if (!quantityInput.value || quantityInput.value < 1) {
+                quantityError.style.display = "block";
+                valid = false;
+            } else {
+                quantityError.style.display = "none";
+            }
+
+            if (!valid) e.preventDefault();
+        });
+
+        // 📊 Real-Time Quantity Feedback
+        quantityInput.addEventListener("input", () => {
+            const quantity = quantityInput.value;
+            if (quantity >= 1) {
+                quantityFeedback.textContent = `📚 ${quantity} copies will be added.`;
+                quantityFeedback.style.color = "var(--primary-color)";
+            } else {
+                quantityFeedback.textContent = "";
+            }
+        });
+
+        // 🖼️ Drag-and-Drop Cover Upload
+        dropZone.addEventListener("click", () => coverInput.click());
+
+        dropZone.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            dropZone.classList.add("dragover");
+        });
+
+        dropZone.addEventListener("dragleave", () => {
+            dropZone.classList.remove("dragover");
+        });
+
+        dropZone.addEventListener("drop", (e) => {
+            e.preventDefault();
+            dropZone.classList.remove("dragover");
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith("image/")) {
+                coverInput.files = e.dataTransfer.files;
+                showPreview(file);
+            }
+        });
+
+        coverInput.addEventListener("change", () => {
+            if (coverInput.files[0]) {
+                showPreview(coverInput.files[0]);
+            }
+        });
+
+        function showPreview(file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                coverPreview.src = e.target.result;
+                coverPreview.style.display = "block";
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
+
+
+
+{% endblock %}

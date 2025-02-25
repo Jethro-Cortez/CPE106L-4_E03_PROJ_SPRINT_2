@@ -3,120 +3,116 @@
 
 {% block content %}
 <div class="user-dashboard">
-    <div class="dashboard-header">
+
+    <!-- 👋 Welcome Header -->
+    <header class="dashboard-header container">
         <h1>Welcome Back, {{ current_user.username }}</h1>
-        <div class="user-stats">
+	</header>
+		
+    <section class="container section-card" aria-label="User Statistics">
             <div class="stat-item">
-                <i class="fas fa-book-open"></i>
+                <i class="fas fa-book-open" aria-hidden="true"></i>
                 <span class="stat-value">{{ total_borrowed }}</span>
                 <span class="stat-label">Books Borrowed</span>
             </div>
             <div class="stat-item">
-                <i class="fas fa-undo"></i>
+                <i class="fas fa-undo" aria-hidden="true"></i>
                 <span class="stat-value">{{ total_returned }}</span>
                 <span class="stat-label">Books Returned</span>
             </div>
             <div class="stat-item">
-                <i class="fas fa-exclamation-triangle"></i>
+                <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
                 <span class="stat-value">{{ total_overdue }}</span>
                 <span class="stat-label">Overdue Books</span>
             </div>
-        </div>
-    </div>
+    </section>
 
-<h2>📚 My Borrowed Books</h2>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>Book</th>
-            <th>Due Date</th>
-            <th>Status</th>
-            <th>Fine</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for transaction in current_loans %}
-        <tr>
-            <td>{{ transaction.book.title }}</td>
-            <td>{{ transaction.due_date.strftime('%Y-%m-%d') }}</td>
-            <td>{{ transaction.status }}</td>
-            <td>
-                {% if transaction.fine_amount > 0 %}
-                    <span class="fine-amount">${{ transaction.fine_amount }}</span>
-                {% else %}
-                    $0.00
-                {% endif %}
-            </td>
-            <td>
-                {% if transaction.status == 'Borrowed' %}
-                    <form method="POST" action="{{ url_for('main.return_book', transaction_id=transaction.id) }}">
-                        <button type="submit" class="btn btn-warning btn-sm">Return</button>
-                    </form>
-                {% elif transaction.fine_amount > 0 %}
-                    <form method="POST" action="{{ url_for('main.clear_fine', transaction_id=transaction.id) }}">
-                        <button type="submit" class="btn btn-primary btn-sm">Clear Fine</button>
-                    </form>
-                {% endif %}
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
-<!-- Total Fine Summary -->
-{% set total_fine = current_loans | sum(attribute='fine_amount') %}
-{% if total_fine > 0 %}
-    <div class="alert alert-warning">
-        Total Outstanding Fines: 💰 ${{ total_fine }}
-    </div>
-{% else %}
-    <div class="alert alert-success">
-        No outstanding fines. ✅
-    </div>
-{% endif %}
+    <!-- 📚 Borrowed Books Table -->
+    <section class="container section-card" aria-labelledby="borrowed-books-heading">
+        <h2 id="borrowed-books-heading">📚 My Borrowed Books</h2>
+        <table class="table">
+            <caption>List of borrowed books with due dates and status</caption>
+            <thead>
+                <tr>
+                    <th scope="col">Book</th>
+                    <th scope="col">Due Date</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Fine</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for transaction in current_loans %}
+                <tr>
+                    <td>
+                        <a href="{{ url_for('main.book_details', slug=transaction.book.title|slugify) }}">
+                            {{ transaction.book.title }}
+                        </a>
+                    </td>
+                    <td>{{ transaction.due_date.strftime('%Y-%m-%d') }}</td>
+                    <td>{{ transaction.status }}</td>
+                    <td>
+                        {% if transaction.fine_amount > 0 %}
+                            <span class="fine-amount">${{ transaction.fine_amount }}</span>
+                        {% else %}
+                            $0.00
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if transaction.status == 'Borrowed' %}
+                            <form method="POST" action="{{ url_for('main.return_book', transaction_id=transaction.id) }}">
+                                <button type="submit" class="btn btn-warning btn-sm">Return</button>
+                            </form>
+                        {% elif transaction.fine_amount > 0 %}
+                            <form method="POST" action="{{ url_for('main.clear_fine', transaction_id=transaction.id) }}">
+                                <button type="submit" class="btn btn-primary btn-sm">Clear Fine</button>
+                            </form>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
 
     <!-- 📖 AI-Based Book Recommendations -->
-    <section class="card">
-        <div class="card-header">
-            <h2>Recommended for You</h2>
-        </div>
+    <section class="container section-card" aria-labelledby="recommended-books-heading">
+        <h2 id="recommended-books-heading">📖 Recommended for You</h2>
         <div class="book-grid">
             {% for book in recommended_books %}
-            <div class="book-card">
-                <img src="{{ url_for('static', filename='covers/' + book.title|slugify + '.jpg') }}" alt="{{ book.title }}">
+            <article class="book-card">
+                <img src="{{ url_for('static', filename='covers/' + book.title|slugify + '.jpg') }}"
+                     alt="Cover of {{ book.title }}">
                 <h3>{{ book.title }}</h3>
                 <p class="author">{{ book.author }}</p>
-                <a href="{{ url_for('main.book_details', book_id=book.id) }}" class="btn btn-primary">Details</a>
-            </div>
+                <a href="{{ url_for('main.book_details', slug=book.title|slugify) }}" class="btn btn-primary">Details</a>
+            </article>
             {% endfor %}
         </div>
     </section>
 
     <!-- 🔍 Available Books with Search -->
-    <section class="card">
+    <section class="container section-card" aria-labelledby="available-books-heading">
         <div class="card-header">
-            <h2>Available Books</h2>
-            <input type="search" class="search-input" id="book-search" placeholder="Search books...">
+            <h2 id="available-books-heading">Available Books</h2>
+            <input type="search" class="search-input" id="book-search" placeholder="Search books..." aria-label="Search books">
         </div>
         <div class="book-grid" id="book-list">
             {% for book in books %}
-            <div class="book-card">
-                <img src="{{ url_for('static', filename='covers/' + book.title|slugify + '.jpg') }}" alt="{{ book.title }}">
+            <article class="book-card">
+                <img src="{{ url_for('static', filename='covers/' + book.title|slugify + '.jpg') }}"
+                     alt="Cover of {{ book.title }}">
                 <h3>{{ book.title }}</h3>
                 <p class="author">{{ book.author }}</p>
                 {% if book.availability %}
-                <a href="{{ url_for('main.borrow_book', book_id=book.id) }}" class="btn btn-success">Borrow</a>
+                    <a href="{{ url_for('main.borrow_book', book_id=book.id) }}" class="btn btn-success">Borrow</a>
                 {% else %}
-                <span class="badge badge-danger">Borrowed</span>
+                    <span class="badge badge-danger">Borrowed</span>
                 {% endif %}
-            </div>
+            </article>
             {% endfor %}
         </div>
     </section>
-	
-	
 
 </div>
 

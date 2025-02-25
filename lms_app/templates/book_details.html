@@ -20,10 +20,10 @@
                 <span class="status-indicator {{ 'available' if book.availability else 'borrowed' }}">
                     {{ 'Available' if book.availability else 'Borrowed' }}
                 </span>
-                {% if not book.availability %}
+                {% if not book.availability and book.transactions %}
                 <p class="due-date">
                     <i class="fas fa-clock"></i>
-                    Expected return: {{ book.transactions[-1].due_date|date_format }}
+                    Expected return: {{ book.transactions[-1].due_date.strftime('%Y-%m-%d') }}
                 </p>
                 {% endif %}
             </div>
@@ -37,6 +37,8 @@
                     {{ 'Borrow Now' if book.availability else 'Join Waitlist' }}
                 </button>
             </form>
+            {% else %}
+                <p class="login-hint">🔐 <a href="{{ url_for('main.login') }}">Log in</a> to borrow or review books.</p>
             {% endif %}
         </div>
     </div>
@@ -78,7 +80,7 @@
                         {{ feedback.user.username }}
                     </div>
                     <div class="review-meta">
-                        <span class="review-date">{{ feedback.timestamp|time_ago }}</span>
+                        <span class="review-date">{{ feedback.timestamp.strftime('%Y-%m-%d') }}</span>
                         <div class="review-rating">
                             {% for _ in range(feedback.rating) %}
                             <i class="fas fa-star"></i>
@@ -110,7 +112,7 @@
                 <label>Rating:</label>
                 <div class="star-rating">
                     {% for i in range(5,0,-1) %}
-                    <input type="radio" id="star{{i}}" name="rating" value="{{i}}">
+                    <input type="radio" id="star{{i}}" name="rating" value="{{i}}" required>
                     <label for="star{{i}}" class="fas fa-star"></label>
                     {% endfor %}
                 </div>
@@ -120,6 +122,8 @@
                 Submit Review
             </button>
         </form>
+        {% else %}
+            <p class="login-hint">📝 <a href="{{ url_for('main.login') }}">Log in</a> to submit a review.</p>
         {% endif %}
     </section>
 </div>

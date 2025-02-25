@@ -10,6 +10,7 @@ from lms_app.models import Transaction
 from datetime import datetime, timedelta
 
 
+
 main = Blueprint('main', __name__)
 
 # 🏠 Home Page
@@ -134,6 +135,13 @@ def admin_dashboard():
         .order_by(func.count(Transaction.id).desc())\
         .limit(5).all()
 
+    # 🏆 Get the Top Book (Most Borrowed)
+    top_book = db.session.query(Book.title, func.count(Transaction.id).label('borrow_count'))\
+        .join(Transaction, Book.id == Transaction.book_id)\
+        .group_by(Book.title)\
+        .order_by(func.count(Transaction.id).desc())\
+        .first()
+
     # 📚 Inventory Overview
     total_books = Book.query.count()
     borrowed_books = Transaction.query.filter_by(status='Borrowed').count()
@@ -148,18 +156,21 @@ def admin_dashboard():
 
     return render_template('admin_dashboard.html',
                            borrow_trends=borrow_trends,
+                           top_book=top_book,  # 🟢 Pass top_book to Template
                            total_books=total_books,
                            borrowed_books=borrowed_books,
                            available_books=available_books,
                            active_users=active_users)
 
+
 # 📖 Book Details
-@main.route('/book/<int:book_id>', methods=['GET'])
+@main.route('/book/<slug>', methods=['GET'])
 @login_required
-def book_details(book_id):
-    book = Book.query.get_or_404(book_id)
-    feedbacks = Feedback.query.filter_by(book_id=book_id).all()
-    return render_template('book_details.html', book=book, feedbacks=feedbacks)
+def book_details(slug):
+    book = Book.query.filter_by(slug=slug).first_or_404()
+    feedbacks = Feedback.query.filter_by(book_id=book.id).all()
+    average_rating = db.session.query(func.avg(Feedback.rating)).filter_by(book_id=book.id).scalar() or 0
+    return render_template('book_details.html', book=book, feedbacks=feedbacks, average_rating=round(average_rating, 1))
 
 # 📚 Borrow Book with Borrow Limit (Max 5)
 @main.route('/borrow/<int:book_id>', methods=['POST'])
@@ -237,17 +248,54 @@ def admin_register():
 
     if request.method == 'POST':
         username = request.form.get('username')
+        email = request.form.get('email')  # 🟢 Capture Email
         password = request.form.get('password')
         hashed_password = generate_password_hash(password)
 
-        new_admin = User(username=username, password_hash=hashed_password, role='admin')
+        # ✅ Check for Missing Fields
+        if not username or not email or not password:
+            flash('All fields are required!', 'warning')
+            return redirect(url_for('main.admin_register', key=secret_key))
+
+        new_admin = User(username=username, email=email, password_hash=hashed_password, role='admin')
 
         try:
             db.session.add(new_admin)
             db.session.commit()
-            flash('Admin registration successful! Please log in.', 'success')
+            flash('Admin registration successful! ✅ Please log in.', 'success')
             return redirect(url_for('main.login'))
         except Exception as e:
             flash(f'Error during admin registration: {e}', 'danger')
 
+
     return render_template('adminreg.html')
+
+@main.route('/add_book', methods=['GET', 'POST'])
+@login_required
+def add_book():
+    if current_user.role != 'admin':
+        abort(403)
+
+    if request.method == 'POST':
+        title = request.form.get('title')
+        author = request.form.get('author')
+        category = request.form.get('category')
+        description = request.form.get('description')
+        quantity = request.form.get('quantity', type=int)
+
+        # ✅ Validate
+        if not title or not author:
+            flash("Title and Author are required.", "warning")
+            return redirect(url_for('main.add_book'))
+
+        # 💾 Save Book
+        new_book = Book(title=title, author=author, category=category, description=description)
+        db.session.add(new_book)
+        db.session.commit()
+
+        flash("Book added successfully! 📚", "success")
+        return redirect(url_for('main.admin_dashboard'))
+
+    return render_template('add_book.html')
+   
+

@@ -2,6 +2,7 @@ from flask import Flask
 from config import Config
 from lms_app import create_app
 
+
 app = create_app(Config)
 
 if __name__ == '__main__':

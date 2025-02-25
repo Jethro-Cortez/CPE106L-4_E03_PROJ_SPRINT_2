@@ -1,22 +1,42 @@
 {% extends "base.html" %}
-{% block title %}Welcome to ModernLib{% endblock %}
+{% block title %}Welcome to BookIT{% endblock %}
 
 {% block content %}
-<!-- 🎉 Hero Section -->
+<!-- 🎉 Hero Section with Animated CTA -->
 <section class="hero">
+    <!-- 🎬 Background Video -->
+    <video autoplay muted loop playsinline class="hero-video">
+        <source src="{{ url_for('static', filename='videos/hero-background.mp4') }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <!-- 🌑 Overlay for Contrast -->
+    <div class="hero-overlay"></div>
+
+    <!-- 💡 Hero Content -->
     <div class="hero-content">
-        <h1 class="hero-title">Welcome to ModernLib 📚</h1>
-        <p class="hero-subtitle">Your gateway to thousands of books. Borrow, read, and review — all in one place.</p>
+        <h1 class="hero-title">
+            Welcome to 
+            <img src="{{ url_for('static', filename='images/logo-name.png') }}" alt="BookIT" class="logo-name" width="200">
+        </h1>
+        <p class="hero-subtitle">A Python-based open-source library management system.</p>
+
+        <!-- 🎯 Animated Call-to-Action -->
         <div class="hero-buttons">
             {% if current_user.is_authenticated %}
-                <a href="{{ url_for('main.user_dashboard') }}" class="btn btn-primary">Go to Dashboard</a>
+                <a href="{{ url_for('main.user_dashboard') }}" class="btn btn-primary cta-btn">Go to Dashboard</a>
             {% else %}
-                <a href="{{ url_for('main.login') }}" class="btn btn-primary">Login</a>
-                <a href="{{ url_for('main.register') }}" class="btn btn-secondary">Register</a>
+                <a href="{{ url_for('main.login') }}" class="btn btn-primary cta-btn">Sign In</a> or
+                <a href="{{ url_for('main.register') }}" class="btn btn-primary cta-btn">Join Now!</a>
             {% endif %}
         </div>
+
+        <!-- 💥 Subtle CTA Prompt -->
+        <p class="cta-prompt">Don't miss out—start managing your library today!</p>
     </div>
 </section>
+
+
 
 <!-- 📚 Feature Highlights -->
 <section class="features">
@@ -53,7 +73,11 @@
         </div>
         <div class="testimonial-card">
             <p>"A must-have for any book lover. The community reviews are gold." 💬</p>
-            <span>- JE Marc G.</span>
+            <span>- JE G.</span>
+        </div>
+		<div class="testimonial-card">
+            <p>"A game-changer for our library!  Highly recommend." 💬</p>
+            <span>- Marc D.</span>
         </div>
     </div>
 </section>

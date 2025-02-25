@@ -1,11 +1,13 @@
 /* 🌗 Default (Light Mode) */
 :root {
-    --primary-color: #3f51b5;
+    --primary-color: #1f3c4a;
     --background-color: #f9f9f9;
     --card-bg: #ffffff;
-    --text-color: #212121;
+    --text-color: #1f3c4a;
     --text-muted: #757575;
     --border-color: #e0e0e0;
+	--button:#b4bfbf;
+	--hvr:#899191;
 }
 
 /* 🌑 Dark Mode */
@@ -13,9 +15,11 @@
     --primary-color: #90caf9;
     --background-color: #121212;
     --card-bg: #1e1e1e;
-    --text-color: #e0e0e0;
+    --text-color: #ffffff;
     --text-muted: #bdbdbd;
     --border-color: #424242;
+	--button:#1f3c4a;
+	--hvr:#122129;
 }
 
 /* 🎨 Apply Variables */

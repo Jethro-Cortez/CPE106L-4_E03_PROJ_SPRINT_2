@@ -3,12 +3,13 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from lms_app import db, login_manager
+from slugify import slugify
 
 # -------------------------
 # 📚 User Model
 # -------------------------
 
-class User(UserMixin, db.Model):
+class User(db.Model):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -18,6 +19,8 @@ class User(UserMixin, db.Model):
     role = db.Column(db.String(50), default='user')
     is_active = db.Column(db.Boolean, default=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    feedbacks = db.relationship('Feedback', backref='user', lazy=True)
 
     def get_id(self):
         return str(self.id)
@@ -34,20 +37,7 @@ class User(UserMixin, db.Model):
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
-
-# -------------------------
-# 📖 UserInfo Model
-# -------------------------
-class UserInfo(db.Model):
-    __bind_key__ = 'users'
-    __tablename__ = 'user_info'
-
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    full_name = db.Column(db.String(120))
-    phone = db.Column(db.String(20))
-    birthdate = db.Column(db.Date)
-    occupation = db.Column(db.String(64))
+    
 
 # -------------------------
 # 📗 Book Model
@@ -56,14 +46,32 @@ class Book(db.Model):
     __tablename__ = 'books'
 
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(150), nullable=False)
-    author = db.Column(db.String(100), nullable=False)
-    isbn = db.Column(db.String(20), unique=True, nullable=False)
-    quantity = db.Column(db.Integer, default=1)
-    category = db.Column(db.String(50))
-    cover_path = db.Column(db.String(200))  # Path to cover image
+    title = db.Column(db.String(255), nullable=False)
+    slug = db.Column(db.String(255), unique=True, nullable=False)
+    author = db.Column(db.String(150), nullable=False)
+    category = db.Column(db.String(100))
+    description = db.Column(db.Text)
+    quantity = db.Column(db.Integer, nullable=False, default=1)
 
-    # Relationships
+    # 📖 Initialize Book
+    def __init__(self, title, author, category, description):
+        self.title = title
+        self.slug = self.generate_unique_slug(title)
+        self.author = author
+        self.category = category
+        self.description = description
+
+    def generate_unique_slug(self, title):
+        base_slug = slugify(title)
+        slug = base_slug
+        counter = 1
+
+        while Book.query.filter_by(slug=slug).first():
+            slug = f"{base_slug}-{counter}"
+            counter += 1
+
+        return slug
+
     transactions = db.relationship('Transaction', backref='book', lazy=True)
 
 # -------------------------
@@ -85,11 +93,13 @@ class Transaction(db.Model):
 # 💬 Feedback Model
 # -------------------------
 class Feedback(db.Model):
-    __bind_key__ = 'feedback'
     __tablename__ = 'feedbacks'
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    book_id = db.Column(db.Integer, db.ForeignKey('books.id'), nullable=False)
     message = db.Column(db.Text, nullable=False)
-    admin_response = db.Column(db.Text)
-    submitted_at = db.Column(db.DateTime, default=datetime.utcnow)
+    rating = db.Column(db.Integer)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+    book = db.relationship('Book', backref='feedbacks')
